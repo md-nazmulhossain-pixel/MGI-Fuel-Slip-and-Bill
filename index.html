@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bill - KR Vendor Invoice Parked Document</title>
+<style>
+@page{size:A4 landscape;margin:8mm 8mm 8mm 18mm}
+*{box-sizing:border-box}
+body{margin:0;background:#e6e6e6;font-family:"Courier New",Courier,monospace;font-size:12px;color:#000}
+.bar,#fbar{width:281mm;margin:8px auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:Arial,sans-serif;font-size:13px}
+.bar button,#fbar button,#menu button{padding:7px 14px;font-size:14px;cursor:pointer}
+.bar input,#fbar input{border:1px solid #888;background:#fff;padding:6px;width:130px}
+#who{font-weight:bold;margin-right:auto}
+.page{width:281mm;min-height:194mm;margin:0 auto 20px;background:#fff;padding:6mm 6mm 6mm 20mm}
+.box{border:1px solid #999}
+.title{background:#b7b7b7;font-weight:bold;font-size:13px;padding:2px 4px}
+.hd{display:grid;grid-template-columns:36% 34% 30%}
+.hd div{height:21px;display:flex;align-items:center;padding:0 6px;white-space:nowrap}
+.hd .v{margin-left:14px}
+input,select{font:inherit;color:inherit;border:0;background:transparent;outline:none}
+.pd{width:92px;cursor:pointer}
+table{width:78%;border-collapse:collapse;table-layout:fixed;margin-top:16px;border:1px solid #999}
+th{background:#b7b7b7;text-align:left;font-weight:bold;padding:2px 4px;border:1px solid #999;height:22px}
+td{border:1px solid #c4c4c4;height:20px;padding:0 4px;white-space:nowrap;overflow:hidden}
+tr.g td{background:#d9d9d9}
+th.n{text-align:right}
+td.c{text-align:center}
+td select{width:100%;padding:0;cursor:pointer}
+td input{width:100%;text-align:right}
+td input.vci{text-align:left}
+.vci::placeholder{color:#aaa;opacity:.8}
+input:disabled,select:disabled,textarea:disabled{color:#000;opacity:1;-webkit-text-fill-color:#000}
+select:disabled{-webkit-appearance:none;appearance:none}
+.st{font-family:Arial,sans-serif;font-size:13px;color:#b00;margin:8px 0 0}
+.st.ok{color:#080}
+#login,#menu{position:fixed;inset:0;background:#e6e6e6;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;z-index:9}
+#login div,#menu div{background:#fff;padding:26px 30px;border:1px solid #999;text-align:center;width:300px}
+#login input{border:1px solid #888;padding:9px;width:100%;margin:12px 0;font-size:16px;text-align:center}
+#login button{padding:9px 22px;font-size:15px;cursor:pointer}
+.bar,.page,#fbar,#fuel,#menu{display:none}
+body.in #login{display:none}
+body.in:not(.m-bill):not(.m-fuel) #menu{display:flex}
+body.m-bill .bar,body.m-fuel #fbar{display:flex}
+body.m-bill .page{display:block}
+body.m-fuel #fuel{display:block}
+body.viewer .ed,body:not(.viewer) .vw,body.b-locked #printBtn,body.b-locked #lockBtn,body.f-locked #fprintBtn,body.f-locked #flockBtn{display:none}
+#menu button{display:block;width:100%;margin:10px 0}
+
+#fuel{font-family:Arial,Helvetica,sans-serif;font-size:13.5px;color:#222}
+.fpage{width:210mm;height:297mm;margin:0 auto 20px;background:#fff;padding:12mm 14mm 12mm 16mm;display:flex;flex-direction:column}
+.fhead{position:relative;height:36mm;text-align:center}
+.flogo{position:absolute;left:-2mm;top:5mm}
+img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
+.ft1{font-weight:bold;font-size:20px;padding-top:1mm}
+.ft2{font-weight:bold;font-size:17px;margin-top:5mm}
+.ft3{font-size:14px}
+.ft4{font-weight:bold;font-size:16px;margin-top:5mm}
+.fbc{position:absolute;right:-2mm;top:21mm}
+.fgrid{display:grid;grid-template-columns:23% 27% 23% 27%;margin-top:10mm;row-gap:5px}
+.fgrid>div{padding:2px 0;min-height:25px;display:flex;align-items:center}
+.fl{color:#444}
+.fv{padding-left:6px}
+.fgap{grid-column:1/-1;height:8px;min-height:0!important}
+#fuel input,#fuel textarea{font:inherit;color:inherit;width:100%;border:0;border-bottom:1px dotted #888;background:#fffbe0;padding:1px 3px;outline:none}
+#fuel textarea{min-height:28mm;resize:none;margin-top:3px;padding:3px;display:block}
+.frem{margin-top:8mm}
+.ffoot{margin-top:auto}
+.fsign{display:grid;grid-template-columns:33% 33% 34%;text-align:center;line-height:1.9}
+.fpd{font-family:"Times New Roman",serif;font-size:11px;margin-top:10mm}
+.fpdg{display:grid;grid-template-columns:66% 34%}
+#fprn{text-align:center}
+@media print{
+ body{background:#fff}
+ .bar,#fbar,.st,#login,#menu{display:none!important}
+ #fuel .fpage{margin:0;height:295mm;overflow:hidden}
+ #fuel input,#fuel textarea{border:0!important;background:transparent!important;padding:0!important}
+ #fuel input::-webkit-calendar-picker-indicator{display:none!important}
+ body:not(.viewer) #fuel,body.f-locked #fuel{display:none!important}
+ body.viewer.f-locked::before{content:"ডাটা লক করা, প্রিন্ট করা যাবে না";display:block;font:16px Arial}
+ body:not(.viewer) .page,body.b-locked .page{display:none!important}
+ body:not(.viewer)::before{content:"প্রিন্ট করার অনুমতি নেই";display:block;font:16px Arial}
+ body.viewer.b-locked::before{content:"ডাটা লক করা, প্রিন্ট করা যাবে না";display:block;font:16px Arial}
+ .page{margin:0;width:100%;min-height:0;padding:0}
+ select{-webkit-appearance:none;appearance:none}
+ input::placeholder{color:transparent!important;-webkit-text-fill-color:transparent!important}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div id="login"><div>
+ <h3 style="margin:0">Bill Form</h3>
+ <input id="code" type="password" placeholder="আপনার কোড" autocomplete="off">
+ <button onclick="login($('code').value)">প্রবেশ</button>
+ <p id="lmsg" style="color:#b00;font-size:13px;min-height:16px"></p>
+</div></div>
+
+<div id="menu"><div>
+ <h3 style="margin:0 0 6px">কোনটিতে প্রবেশ করবেন?</h3>
+ <button onclick="openModule('bill')">📄 বিল</button>
+ <button onclick="openModule('fuel')">⛽ ফুয়েল স্লিপ</button>
+ <button onclick="logout()" style="font-size:13px">লগআউট</button>
+</div></div>
+
+<div id="fbar">
+ <span id="who2" style="font-weight:bold;margin-right:auto"></span>
+ <span id="fmsg" style="font-size:13px;margin-right:8px"></span>
+ <input id="fq" placeholder="Fuel Slip Number" onkeydown="if(event.key==='Enter')ffind()">
+ <button onclick="ffind()">🔍 খুঁজুন</button>
+ <button class="ed" onclick="fnew()">নতুন স্লিপ</button>
+ <button class="ed" id="fsaveBtn" onclick="fsave()">💾 সেভ</button>
+ <button class="vw" id="fprintBtn" onclick="fprint()">🖨 প্রিন্ট</button>
+ <button class="vw" id="flockBtn" onclick="flock()">🔒 ডাটা লক</button>
+ <button onclick="toMenu()">⇦ মেনু</button>
+ <button onclick="logout()">লগআউট</button>
+</div>
+<div id="fuel"><div class="fpage">
+ <div class="fhead">
+  <img class="flogo" id="flogoImg" alt="MGI" src="https://commons.wikimedia.org/wiki/Special:FilePath/MGI_Logo.png?width=400" onerror="this.style.display='none';$('flogoFb').style.display='block'">
+  <svg class="flogo" id="flogoFb" style="display:none" width="150" height="60" viewBox="0 0 150 60"><text x="2" y="42" font-family="Georgia,serif" font-style="italic" font-weight="bold" font-size="46" fill="#5b6470">Mgi</text></svg>
+  <div class="ft1">Meghna Group of Industries</div>
+  <div class="ft2">Meghna Transport Company</div>
+  <div class="ft3">MTRC Plant,Meghnaghat,Sonargaon-1440</div>
+  <div class="ft4">Fuel Slip - DIESEL</div>
+  <svg class="fbc" id="fbc" width="115" height="30"></svg>
+ </div>
+ <div class="fgrid">
+  <div class="fl">Fuel Slip Number &nbsp;-</div><div class="fv">: <b>&nbsp;<span id="fslip"></span></b></div>
+  <div class="fl">Date</div><div class="fv">: <b>&nbsp;<span id="fdt"></span></b></div>
+  <div class="fl">Plant Name</div><div class="fv">: MTRC Plant</div>
+  <div class="fl">Service Order No.</div><div class="fv">:</div>
+
+  <div class="fgap"></div>
+
+  <div class="fl">Driver Code No.</div><div class="fv">:&nbsp;<input id="dcode" autocomplete="off"></div>
+  <div class="fl">Driver ID No.</div><div class="fv">: <span id="did"></span></div>
+
+  <div class="fl">Driver's Name</div><div class="fv">: <b>&nbsp;<span id="dname"></span></b></div>
+  <div class="fl">Driver's Contact No.</div><div class="fv">:&nbsp;<input id="phone" inputmode="numeric" maxlength="12" autocomplete="off"></div>
+
+  <div class="fl">Fuel Type</div><div class="fv">: DIESEL</div>
+  <div class="fl">KM Per LTR.</div><div class="fv">:&nbsp;<input id="kpl" inputmode="decimal" autocomplete="off"></div>
+
+  <div class="fl">Vehicle Move IN No.</div><div class="fv">:</div>
+  <div class="fl">Vehicle No.</div><div class="fv">:&nbsp;<input id="veh" list="dlVeh" autocomplete="off"></div>
+
+  <div class="fl">Shipment No.</div><div class="fv">:</div>
+  <div class="fl">Proposed Route</div><div class="fv">:</div>
+
+  <div class="fl">Delivery Planning No.</div><div class="fv">:</div>
+  <div class="fl">Transport Planning No.</div><div class="fv">:</div>
+
+  <div class="fl">Last Meter Reading</div><div class="fv">:&nbsp;<input id="last" inputmode="decimal" autocomplete="off"></div>
+  <div class="fl">Current Meter Reading</div><div class="fv">: <span id="cur"></span></div>
+
+  <div class="fl">Proposed Distance(KM)</div><div class="fv">:</div>
+  <div class="fl">Actual Distance (KM)</div><div class="fv">:&nbsp;<input id="act" inputmode="decimal" autocomplete="off"></div>
+
+  <div class="fl">Delivery From</div><div class="fv">: Meghnaghat, Sonargaon,</div>
+  <div class="fl">Destination</div><div class="fv">:&nbsp;<input id="dest" list="dlDest" autocomplete="off"></div>
+
+  <div class="fl">Fuel Required (Ltr.)</div><div class="fv">: <span id="req"></span></div>
+  <div class="fl">Fuel Allowed (Ltr.)</div><div class="fv">:&nbsp;<input id="allow" inputmode="decimal" autocomplete="off"></div>
+ </div>
+ <div class="frem">Remarks(Comments):<textarea id="remarks" rows="4" maxlength="300"></textarea></div>
+ <div class="ffoot">
+  <div class="fsign">
+   <div>Prepared By</div>
+   <div>Approved By<br><span id="fapp"></span></div>
+   <div>Printed By</div>
+  </div>
+  <div class="fpd fpdg"><div><div id="fcreator"></div>Print Date and Time: <span id="fpdt"></span></div><div id="fprn"></div></div>
+ </div>
+ <datalist id="dlVeh"></datalist><datalist id="dlDest"></datalist>
+</div></div>
+
+<div class="bar">
+ <span id="who"></span>
+ <input id="q" placeholder="Doc. Number" onkeydown="if(event.key==='Enter')findBill()">
+ <button onclick="findBill()">🔍 খুঁজুন</button>
+ <button onclick="toMenu()">⇦ মেনু</button>
+ <button class="ed" onclick="newBill()">নতুন বিল</button>
+ <button class="ed" id="saveBtn" onclick="save()">💾 সেভ</button>
+ <button class="vw" id="printBtn" onclick="doPrint()">🖨 প্রিন্ট</button>
+ <button class="vw" id="lockBtn" onclick="lockBill()">🔒 ডাটা লক</button>
+ <button onclick="logout()">লগআউট</button>
+</div>
+
+<div class="page">
+ <div class="box">
+  <div class="title">Doc. Type : KR ( Vendor Invoice ) Parked document</div>
+  <div class="hd">
+   <div>Doc. Number<span class="v" id="docNo"></span></div>
+   <div>Company Code 4400</div>
+   <div>Fiscal Year 2026</div>
+
+   <div>Doc. Date<span class="v" id="docDate"></span></div>
+   <div>Posting Date<span class="v"><input class="pd" id="postTxt" readonly></span><input type="date" id="postDate" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none"></div>
+   <div>Period <span class="v" id="period" style="margin-left:6px"></span></div>
+
+   <div>Calculate Tax<span class="v" style="margin-left:40px">0</span></div><div></div><div></div>
+   <div>Doc. Currency<span class="v" style="margin-left:10px">BDT</span></div><div></div><div></div>
+  </div>
+ </div>
+
+ <table>
+  <colgroup>
+   <col style="width:6%"><col style="width:6%"><col style="width:13%"><col style="width:33%"><col style="width:16%"><col style="width:4%"><col style="width:22%">
+  </colgroup>
+  <thead><tr><th style="text-align:center">Itm</th><th style="text-align:center">PK</th><th>Account</th><th>Account Short Text</th><th>Assignment</th><th>Tx</th><th class="n">Amount</th></tr></thead>
+  <tbody id="rows"></tbody>
+ </table>
+ <p class="st" id="status"></p>
+ <p id="creator" style="margin:10px 0 0;font-size:12px"></p>
+</div>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbwLRjNV8XYV-y7eiImtsOaES192mUJ5AFOIiXKH7s_hL1o9zwrzFC_USTwJBFwEAKP3/exec";
+const ACCS=["30201191","30201121","30100006","30100066","30100031","30100026","30010126","30100081","30201201","30201141","30201096","30201196"];
+const ACC={"30201191":"Toll & Tariff Expense","30201121":"Local Authority","30100006":"Repair & Maintenance","30100066":"Convance Expense","30100031":"Unload Expense","30100026":"Loading Expense","30010126":"Security Hiring Expense","30100081":"Mobile Bill Expense","30201201":"Trip Bonus","30201141":"Scaling Expense","30201096":"Daily Allowance/DA","30201196":"Traffic Expense"};
+const ROWS=13, $=id=>document.getElementById(id), pad=n=>String(n).padStart(2,"0");
+const fmt=d=>pad(d.getDate())+"."+pad(d.getMonth()+1)+"."+d.getFullYear();
+function setBillLocked(b){billLocked=b;document.body.classList.toggle("b-locked",b)}
+let S={code:"",name:"",role:""}, editing=false, busy=false, vInfo="", tok=0, locked=false, billLocked=false, docDateStr="", vt;
+const isEd=()=>S.role==="editor";
+
+async function api(action,data,code){
+ try{
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action,code:code||S.code},data||{}))});
+  return await r.json();
+ }catch(e){return{ok:false,error:"সার্ভারের সাথে সংযোগ হয়নি"}}
+}
+function msg(t,ok){const s=$("status");s.textContent=t||"";s.className="st"+(ok?" ok":"")}
+
+// ---- rows
+const tb=$("rows");
+for(let i=0;i<ROWS;i++){
+ const tr=document.createElement("tr");
+ if(i%2===1)tr.className="g";
+ const opts='<option value=""></option>'+ACCS.slice().sort().map(k=>`<option value="${k}">${k}</option>`).join("");
+ tr.innerHTML=i===0
+ ?`<td class="c"></td><td class="c"></td><td><input class="vci" id="vcode" placeholder="Vendor Code" autocomplete="off"></td><td id="vName"></td><td><input class="vci" id="asg" maxlength="50" autocomplete="off"></td><td></td><td id="total" style="text-align:right"></td>`
+ :`<td class="c"></td><td class="c"></td><td><select>${opts}</select></td><td></td><td></td><td></td><td><input inputmode="decimal"></td>`;
+ tb.appendChild(tr);
+}
+const trs=[...tb.children], body=trs.slice(1);
+
+function recalc(){
+ let sum=0,n=0;
+ const used=body.map(t=>t.children[2].firstChild.value);
+ body.forEach(tr=>{
+  const c=tr.children,sel=c[2].firstChild,acc=sel.value,amt=parseFloat(c[6].firstChild.value)||0;
+  [...sel.options].forEach(o=>{o.disabled=!!o.value&&o.value!==acc&&used.includes(o.value)});
+  if(acc){n++;c[0].textContent=n+1;c[1].textContent="40";c[3].textContent=ACC[acc]}
+  else{c[0].textContent="";c[1].textContent="";c[3].textContent=""}
+  if(acc||amt)sum+=amt;
+ });
+ trs[0].children[0].textContent="1";trs[0].children[1].textContent="31";
+ $("total").textContent=sum?sum.toFixed(2)+"-":"";
+}
+body.forEach(tr=>{
+ const sel=tr.children[2].firstChild,inp=tr.children[6].firstChild;
+ sel.addEventListener("change",recalc);
+ inp.addEventListener("input",recalc);
+ inp.addEventListener("blur",()=>{const v=parseFloat(inp.value);if(!isNaN(v))inp.value=v.toFixed(2);recalc()});
+});
+
+// ---- dates
+function setPosting(iso){
+ $("postDate").value=iso;const[y,m,d]=iso.split("-");
+ $("postTxt").value=d+"."+m+"."+y;const mo=+m;
+ $("period").textContent=pad(mo>=7?mo-6:mo+6);
+}
+function todayISO(){const t=new Date();return t.getFullYear()+"-"+pad(t.getMonth()+1)+"-"+pad(t.getDate())}
+$("postTxt").addEventListener("click",()=>{if(locked)return;const p=$("postDate");try{p.style.pointerEvents="auto";p.showPicker()}catch(e){p.focus();p.click()}});
+$("postDate").addEventListener("change",e=>{if(e.target.value)setPosting(e.target.value)});
+
+// ---- vendor
+$("vcode").addEventListener("input",()=>{clearTimeout(vt);vInfo="";$("vName").textContent="";vt=setTimeout(lookup,500)});
+async function lookup(){
+ const c=$("vcode").value.trim();if(!c){msg("");return}
+ const my=++tok,r=await api("vendor",{vendor:c});if(my!==tok)return;
+ if(r.ok&&r.found){vInfo=r.info;$("vName").textContent=r.info;msg("")}else msg(r.error||"ভ্যান্ডর কোড পাওয়া যায়নি");
+}
+
+// ---- form state
+function setLocked(b){
+ locked=b;
+ body.forEach(t=>{t.children[2].firstChild.disabled=b;t.children[6].firstChild.disabled=b});
+ $("vcode").disabled=b;$("asg").disabled=b;
+}
+function clearForm(keep){
+ body.forEach(t=>{t.children[2].firstChild.value="";t.children[6].firstChild.value=""});
+ $("vcode").value="";$("asg").value="";$("vName").textContent="";vInfo="";editing=false;
+ docDateStr=fmt(new Date());$("docDate").textContent=docDateStr;
+ setPosting(todayISO());recalc();if(!keep)msg("");
+ setBillLocked(false);setLocked(!isEd());$("creator").textContent="";
+ $("saveBtn").textContent="💾 সেভ";
+}
+async function newBill(keep){
+ if(!isEd())return;
+ clearForm(keep);$("docNo").textContent="...";
+ const r=await api("next");
+ if(r.ok)$("docNo").textContent=r.docNo;else{$("docNo").textContent="";msg(r.error)}
+}
+async function findBill(){
+ let q=$("q").value.trim().toUpperCase();if(!q)return;
+ if(/^\d+$/.test(q))q="M-"+q;
+ msg("খোঁজা হচ্ছে...",true);
+ const r=await api("get",{docNo:q});
+ if(!r.ok){msg(r.error);return}
+ clearForm();
+ $("docNo").textContent=r.docNo;docDateStr=r.docDate;$("docDate").textContent=r.docDate;
+ const[d,m,y]=r.postingDate.split(".");setPosting(y+"-"+m+"-"+d);
+ $("vcode").value=r.vendorCode;$("asg").value=r.assignment||"";$("vName").textContent=r.driverInfo;vInfo=r.driverInfo;
+ let i=0;
+ ACCS.forEach(a=>{if(r.amounts[a]!==undefined&&i<body.length){const t=body[i++];t.children[2].firstChild.value=a;t.children[6].firstChild.value=Number(r.amounts[a]).toFixed(2)}});
+ recalc();editing=true;setBillLocked(!!r.locked);
+ if(billLocked)setLocked(true);
+ $("saveBtn").textContent="💾 আপডেট";
+ $("creator").textContent="Bill Creator: "+r.creator;
+ msg(billLocked?"🔒 লক করা বিল, এডিট করা যাবে না":"",true);
+}
+async function save(){
+ if(busy||!isEd())return;
+ if(billLocked){msg("এই বিল লক করা, এডিট করা যাবে না");return}
+ const vc=$("vcode").value.trim();
+ if(!vc||!vInfo){msg("সঠিক ভ্যান্ডর কোড দিন");return}
+ const amounts={};let any=false;
+ for(const t of body){
+  const a=t.children[2].firstChild.value,v=t.children[6].firstChild.value.trim();
+  if(v&&!a){msg("Amount এর জন্য Account বাছাই করুন");return}
+  if(a&&v){const x=parseFloat(v);if(isNaN(x)){msg("Amount সঠিক নয়");return}amounts[a]=x;any=true}
+ }
+ if(!any){msg("অন্তত একটি Amount দিন");return}
+ busy=true;$("saveBtn").disabled=true;msg("সেভ হচ্ছে...",true);
+ const r=await api("save",{editing,docNo:$("docNo").textContent,docDate:docDateStr,postingDate:$("postTxt").value,vendorCode:vc,assignment:$("asg").value.trim(),amounts});
+ busy=false;$("saveBtn").disabled=false;
+ if(r.ok){msg("✔ "+(r.updated?"আপডেট":"সেভ")+" হয়েছে: "+r.docNo,true);newBill(true)}
+ else msg(r.error);
+}
+
+// ---- login
+async function login(code,auto){
+ code=String(code||"").trim();if(!code)return;
+ if(API_URL.indexOf("PASTE")===0){$("lmsg").textContent="API_URL বসানো হয়নি";return}
+ $("lmsg").textContent="যাচাই হচ্ছে...";
+ const r=await api("login",{},code);
+ if(!r.ok){$("lmsg").textContent=r.error;try{sessionStorage.removeItem("billCode")}catch(e){}return}
+ S={code,name:r.name,role:r.role};
+ try{sessionStorage.setItem("billCode",code)}catch(e){}
+ document.body.classList.add("in");
+ document.body.classList.toggle("viewer",!isEd());
+ $("who").textContent="👤 "+S.name+" ("+(isEd()?"Editor":"Viewer")+")";
+ $("who2").textContent=$("who").textContent;
+ setLocked(!isEd());
+}
+function openModule(m){
+ document.body.classList.remove("m-bill","m-fuel");
+ document.body.classList.add("m-"+m);setPage();
+ if(m==="bill"){
+  if(isEd())newBill();else{clearForm();$("docNo").textContent="";msg("Doc. Number দিয়ে খুঁজুন",true)}
+ }
+ if(m==="fuel"){
+  setBillLocked(false);floadLists();
+  if(isEd())fnew();else{fclear();fmsg("Fuel Slip Number দিয়ে খুঁজুন",true)}
+ }
+}
+function toMenu(){document.body.classList.remove("m-bill","m-fuel");setPage()}
+function doPrint(){
+ if(billLocked){msg("ডাটা লক করা, প্রিন্ট করা যাবে না");return}
+ window.print();
+}
+async function lockBill(ask){
+ if(isEd())return;
+ const d=$("docNo").textContent;
+ if(!editing||!d){msg("আগে একটি বিল খুঁজুন");return}
+ if(billLocked){msg("এই বিল আগেই লক করা আছে",true);return}
+ if(!confirm(ask?d+": প্রিন্ট শেষ। আপনি কি ডাটা লক করতে চান?":d+" এর ডাটা লক করবেন? লক করলে Editor আর এডিট করতে পারবে না।"))return;
+ const r=await api("lock",{docNo:d});
+ if(r.ok){clearForm(true);$("docNo").textContent="";$("q").value="";msg("🔒 ডাটা লক হয়েছে: "+d,true)}else msg(r.error);
+}
+window.addEventListener("afterprint",()=>{
+ if(S.role!=="viewer")return;
+ const c=document.body.classList;
+ if(c.contains("m-fuel")){if(fEditing&&!fLocked)setTimeout(()=>flock(true),400)}
+ else if(c.contains("m-bill")&&editing&&!billLocked)setTimeout(()=>lockBill(true),400);
+});
+document.addEventListener("keydown",e=>{
+ if(!((e.ctrlKey||e.metaKey)&&String(e.key).toLowerCase()==="p"))return;
+ const f=document.body.classList.contains("m-fuel"),L=f?fLocked:billLocked;
+ if(S.role!=="viewer"||L){e.preventDefault();(f?fmsg:msg)(L?"ডাটা লক করা, প্রিন্ট করা যাবে না":"প্রিন্ট করার অনুমতি নেই")}
+});
+function logout(){
+ fclear();
+ try{sessionStorage.removeItem("billCode")}catch(e){}
+ S={code:"",name:"",role:""};document.body.classList.remove("in","viewer","m-bill","m-fuel");
+ $("code").value="";$("lmsg").textContent="";
+}
+$("code").addEventListener("keydown",e=>{if(e.key==="Enter")login($("code").value)});
+
+// ---- page size: Bill = A4 landscape, Fuel Slip = A4 portrait
+const PGS=document.createElement("style");document.head.appendChild(PGS);
+function setPage(){
+ const f=document.body.classList.contains("m-fuel");
+ PGS.textContent=f?"@page{size:A4 portrait;margin:0}":"@page{size:A4 landscape;margin:8mm 8mm 8mm 18mm}";
+}
+window.addEventListener("beforeprint",setPage);
+// ================= Fuel Slip =================
+const fnum=v=>{const x=parseFloat(String(v).replace(/,/g,""));return isNaN(x)?null:x};
+const ff3=v=>v.toLocaleString("en-US",{minimumFractionDigits:3,maximumFractionDigits:3});
+const fv3=x=>(x===""||x===null||x===undefined||isNaN(Number(x)))?"":ff3(Number(x));
+const FIN=["dcode","phone","kpl","veh","last","act","dest","allow","remarks"];
+let fEditing=false,fLocked=false,fDate="",dTok=0,dT,fBusy=false,FL={vehicles:[],destinations:[]};
+function setFLocked(b){fLocked=b;document.body.classList.toggle("f-locked",b)}
+function fReadonly(b){FIN.forEach(i=>$(i).disabled=b)}
+function fmsg(t,ok){const m=$("fmsg");m.textContent=t||"";m.style.color=ok?"#080":"#b00"}
+function fclock(){
+ const t=new Date(),d=pad(t.getDate())+"."+pad(t.getMonth()+1)+"."+t.getFullYear();
+ if(!fEditing){fDate=d;$("fdt").textContent=d}
+ $("fapp").textContent=d;
+ $("fpdt").textContent=d+" "+pad(t.getHours())+":"+pad(t.getMinutes())+":"+pad(t.getSeconds());
+}
+setInterval(fclock,1000);window.addEventListener("beforeprint",fclock);
+window.addEventListener("beforeprint",()=>{$("fprn").textContent=(fEditing&&S.role==="viewer")?"Fuel Slip Printed by: "+S.name:""});
+window.addEventListener("afterprint",()=>{$("fprn").textContent=""});
+function fclear(keep){
+ FIN.forEach(i=>$(i).value="");
+ ["did","dname","cur","req","fslip","fcreator","fprn"].forEach(i=>$(i).textContent="");
+ fEditing=false;setFLocked(false);fReadonly(!isEd());
+ $("fsaveBtn").textContent="💾 সেভ";fclock();if(!keep)fmsg("");
+}
+async function fnew(keep){
+ if(!isEd())return;
+ fclear(keep);$("fslip").textContent="...";
+ const r=await api("fuelnext");
+ $("fslip").textContent=r.ok?r.slipNo:"";if(!r.ok)fmsg(r.error);
+}
+function fillDL(id,a){$(id).innerHTML=a.map(x=>'<option value="'+String(x).replace(/"/g,"&quot;")+'">').join("")}
+async function floadLists(){
+ const r=await api("lists");
+ if(r.ok){FL=r;fillDL("dlVeh",r.vehicles);fillDL("dlDest",r.destinations)}else fmsg(r.error);
+}
+const canon=(list,v)=>{const k=String(v).trim().toLowerCase();return list.find(x=>String(x).toLowerCase()===k)};
+
+// driver lookup (Driver Code No. -> Driver ID No. + Name)
+$("dcode").addEventListener("input",()=>{clearTimeout(dT);$("did").textContent="";$("dname").textContent="";dT=setTimeout(flookup,500)});
+async function flookup(){
+ const c=$("dcode").value.trim();if(!c)return;
+ const my=++dTok,r=await api("driver",{dcode:c});if(my!==dTok)return;
+ if(r.ok&&r.found){$("did").textContent=r.id;$("dname").textContent=r.name;fmsg("")}else fmsg(r.error||"ড্রাইভার কোড পাওয়া যায়নি");
+}
+$("phone").addEventListener("input",e=>{
+ const d=e.target.value.replace(/\D/g,"").slice(0,11);
+ e.target.value=d.length>5?d.slice(0,5)+"-"+d.slice(5):d;
+});
+["veh","dest"].forEach(id=>$(id).addEventListener("blur",()=>{
+ const c=canon(FL[id==="veh"?"vehicles":"destinations"],$(id).value);if(c)$(id).value=c;
+}));
+["kpl","last","act","allow"].forEach(id=>{
+ const el=$(id);
+ el.addEventListener("input",()=>{el.value=el.value.replace(/[^0-9.,]/g,"");fcalc()});
+ el.addEventListener("focus",()=>{el.value=el.value.replace(/,/g,"")});
+ el.addEventListener("blur",()=>{const v=fnum(el.value);el.value=v===null?"":ff3(v);fcalc()});
+});
+function fcalc(){
+ const last=fnum($("last").value),act=fnum($("act").value),kpl=fnum($("kpl").value);
+ $("cur").textContent=(last!==null&&act!==null)?ff3(last+act):"";
+ $("req").textContent=(act!==null&&kpl)?ff3(act/kpl):"";
+}
+async function fsave(){
+ if(fBusy||!isEd())return;
+ if(fLocked){fmsg("এই স্লিপ লক করা, এডিট করা যাবে না");return}
+ const need=[["dcode","Driver Code No."],["phone","Driver's Contact No."],["kpl","KM Per LTR."],["veh","Vehicle No."],["act","Actual Distance (KM)"],["dest","Destination"],["allow","Fuel Allowed (Ltr.)"]];
+ for(const[i,n]of need){if(!$(i).value.trim()){fmsg(n+" দিতে হবে");$(i).focus();return}}
+ if(!$("dname").textContent){fmsg("সঠিক Driver Code No. দিন");return}
+ if($("phone").value.replace(/\D/g,"").length!==11){fmsg("মোবাইল নম্বর ১১ ডিজিট হতে হবে");return}
+ if(FL.vehicles.length){const c=canon(FL.vehicles,$("veh").value);if(!c){fmsg("Vehicle No. তালিকা থেকে বাছাই করুন");return}$("veh").value=c}
+ {const c=canon(FL.destinations,$("dest").value);if(c)$("dest").value=c}
+ const kpl=fnum($("kpl").value),act=fnum($("act").value),allow=fnum($("allow").value),last=fnum($("last").value);
+ if(!(kpl>0)||act===null||allow===null){fmsg("সংখ্যা সঠিক নয়");return}
+ fBusy=true;$("fsaveBtn").disabled=true;fmsg("সেভ হচ্ছে...",true);
+ const r=await api("fuelsave",{editing:fEditing,slipNo:$("fslip").textContent,date:fDate,dcode:$("dcode").value.trim(),phone:$("phone").value,kpl,veh:$("veh").value.trim(),last,act,dest:$("dest").value.trim(),allow,remarks:$("remarks").value.trim()});
+ fBusy=false;$("fsaveBtn").disabled=false;
+ if(r.ok){fmsg("✔ "+(r.updated?"আপডেট":"সেভ")+" হয়েছে: "+r.slipNo,true);fnew(true)}else fmsg(r.error);
+}
+async function ffind(){
+ let q=$("fq").value.trim().toUpperCase();if(!q)return;
+ if(/^\d+$/.test(q))q="CEM-"+q.padStart(5,"0");
+ fmsg("খোঁজা হচ্ছে...",true);
+ const r=await api("fuelget",{slipNo:q});
+ if(!r.ok){fmsg(r.error);return}
+ fclear(true);
+ fEditing=true;fDate=r.date;$("fdt").textContent=r.date;$("fslip").textContent=r.slipNo;
+ $("dcode").value=r.dcode;$("did").textContent=r.did;$("dname").textContent=r.dname;$("phone").value=r.phone;
+ $("kpl").value=fv3(r.kpl);$("veh").value=r.veh;$("last").value=fv3(r.last);$("act").value=fv3(r.act);
+ $("dest").value=r.dest;$("allow").value=fv3(r.allow);$("remarks").value=r.remarks;
+ fcalc();setFLocked(!!r.locked);fReadonly(!isEd()||!!r.locked);
+ $("fsaveBtn").textContent="💾 আপডেট";
+ $("fcreator").textContent="Fuel Slip Creator: "+r.creator;
+ fmsg(r.locked?"🔒 লক করা স্লিপ, এডিট করা যাবে না":"",true);
+}
+function fprint(){
+ if(fLocked){fmsg("ডাটা লক করা, প্রিন্ট করা যাবে না");return}
+ if(!fEditing){fmsg("আগে একটি স্লিপ খুঁজুন");return}
+ window.print();
+}
+async function flock(ask){
+ if(isEd())return;
+ const d=$("fslip").textContent;
+ if(!fEditing||!d){fmsg("আগে একটি স্লিপ খুঁজুন");return}
+ if(fLocked){fmsg("এই স্লিপ আগেই লক করা আছে",true);return}
+ if(!confirm(ask?d+": প্রিন্ট শেষ। আপনি কি ডাটা লক করতে চান?":d+" এর ডাটা লক করবেন? লক করলে Editor আর এডিট করতে পারবে না।"))return;
+ const r=await api("fuellock",{slipNo:d});
+ if(r.ok){fclear(true);$("fq").value="";fmsg("🔒 ডাটা লক হয়েছে: "+d,true)}else fmsg(r.error);
+}
+(function(){
+ const n="3002214887",svg=$("fbc");let x=0,h="";
+ for(let i=0;i<60;i++){const d=+n[i%n.length],w=1+((d*7+i*3)%3);if(i%2===0)h+='<rect x="'+x+'" y="0" width="'+w+'" height="30" fill="#222"/>';x+=w+0.6;if(x>113)break}
+ svg.innerHTML=h;
+})();
+clearForm();
+try{const c=sessionStorage.getItem("billCode");if(c)login(c,true)}catch(e){}
+</script>
+</body>
+</html>
