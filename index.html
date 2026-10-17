@@ -5,13 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bill - KR Vendor Invoice Parked Document</title>
 <style>
-@page{size:A4 landscape;margin:8mm 8mm 8mm 18mm}
+@page{size:A4 landscape;margin:0}
 *{box-sizing:border-box}
 body{margin:0;background:#e6e6e6;font-family:"Courier New",Courier,monospace;font-size:12px;color:#000}
-.bar,#fbar{width:281mm;margin:8px auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-family:Arial,sans-serif;font-size:13px}
-.bar button,#fbar button,#menu button{padding:7px 14px;font-size:14px;cursor:pointer}
-.bar input,#fbar input{border:1px solid #888;background:#fff;padding:6px;width:130px}
-#who{font-weight:bold;margin-right:auto}
+.bar,#fbar{position:sticky;top:10px;z-index:5;width:min(281mm,96vw);margin:14px auto;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-radius:18px;color:#fff;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;background:rgba(10,36,71,.72);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tb{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font:600 14px Inter,"Segoe UI",Roboto,Arial,sans-serif;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s,border-color .2s}
+.tb::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-120%);transition:transform .6s}
+.tb:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,150,255,.35);border-color:#5cc8ff}
+.tb:hover::after{transform:translateX(120%)}
+.tb:active{transform:translateY(0) scale(.96)}
+.tb:disabled{opacity:.55;cursor:wait}
+.tb.t-cy{background:rgba(0,198,255,.16);border-color:rgba(0,198,255,.45)}
+.tb.t-pr{background:linear-gradient(135deg,#1e88e5,#00c6ff);border-color:transparent}
+.tb.t-gn{background:linear-gradient(135deg,#12a77d,#38d9a9);border-color:transparent}
+.tb.t-am{background:linear-gradient(135deg,#ff8a3d,#ffc23d);border-color:transparent;color:#2a1500}
+.tb.t-rd:hover{background:rgba(255,80,80,.24);border-color:#ff8e8e;box-shadow:0 10px 26px rgba(255,80,80,.3)}
+.bar input,#fbar input{height:40px;width:170px;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;font:14px Inter,"Segoe UI",Roboto,Arial,sans-serif;outline:0}
+.bar input::placeholder,#fbar input::placeholder{color:rgba(255,255,255,.5)}
+.bar input:focus,#fbar input:focus{border-color:#5cc8ff;box-shadow:0 0 0 3px rgba(0,198,255,.18)}
+#who,#who2{margin-right:auto;display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;padding:6px 16px 6px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16)}
+#who::before,#who2::before{content:"";width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#1e88e5,#00c6ff)}
+#fmsg{font-size:13px;font-weight:600}
+#fmsg.ok{color:#7dffb0}#fmsg.err{color:#ff9c96}
+body.m-bill,body.m-fuel{min-height:100vh;background-color:#081a38;background-attachment:fixed;background-size:auto,auto,46px 46px,46px 46px,auto;
+ background-image:radial-gradient(900px 520px at 10% 0%,rgba(40,120,220,.35),transparent 60%),radial-gradient(800px 520px at 95% 100%,rgba(0,200,255,.18),transparent 60%),linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(160deg,#081a38,#0a2447 55%,#06142b)}
+body.m-bill .page,body.m-fuel .fpage{box-shadow:0 24px 70px rgba(0,0,0,.5)}
 .page{width:281mm;min-height:194mm;margin:0 auto 20px;background:#fff;padding:6mm 6mm 6mm 20mm}
 .box{border:1px solid #999}
 .title{background:#b7b7b7;font-weight:bold;font-size:13px;padding:2px 4px}
@@ -34,10 +53,89 @@ input:disabled,select:disabled,textarea:disabled{color:#000;opacity:1;-webkit-te
 select:disabled{-webkit-appearance:none;appearance:none}
 .st{font-family:Arial,sans-serif;font-size:13px;color:#b00;margin:8px 0 0}
 .st.ok{color:#080}
-#login,#menu{position:fixed;inset:0;background:#e6e6e6;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;z-index:9}
-#login div,#menu div{background:#fff;padding:26px 30px;border:1px solid #999;text-align:center;width:300px}
-#login input{border:1px solid #888;padding:9px;width:100%;margin:12px 0;font-size:16px;text-align:center}
-#login button{padding:9px 22px;font-size:15px;cursor:pointer}
+#menu{position:fixed;inset:0;z-index:9;flex-direction:column;overflow:auto;color:#fff;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;
+ background:radial-gradient(900px 520px at 12% 8%,rgba(40,120,220,.38),transparent 60%),radial-gradient(800px 520px at 92% 92%,rgba(0,200,255,.2),transparent 60%),linear-gradient(160deg,#081a38,#0a2447 55%,#06142b)}
+#menu::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:46px 46px;-webkit-mask-image:radial-gradient(ellipse at center,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse at center,#000 25%,transparent 78%)}
+.mn-wm{position:absolute;right:-3%;bottom:-4%;width:min(760px,75vw);height:auto;opacity:.07;filter:brightness(0) invert(1);pointer-events:none}
+.mn-top{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 34px}
+.mn-user{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px);font-weight:600}
+.mn-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e88e5,#00c6ff)}
+.mn-user em{font-style:normal;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:rgba(0,198,255,.16);color:#7fdcff}
+.mn-out{display:flex;align-items:center;gap:8px;cursor:pointer;color:#fff;font-weight:600;font-size:14px;font-family:inherit;padding:10px 18px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18)}
+.mn-out:hover{background:rgba(255,80,80,.18);border-color:rgba(255,120,120,.5)}
+.mn-main{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 24px 30px;text-align:center}
+.mn-kick{margin:0;font-size:12px;letter-spacing:4px;color:#7fdcff;font-weight:600}
+.mn-main h2{margin:10px 0 6px;font-size:46px;font-weight:800;letter-spacing:.5px}
+.mn-sub{margin:0 0 40px;color:rgba(255,255,255,.65);font-size:16px}
+.mn-cards{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
+.mn-card{position:relative;width:340px;padding:28px 26px 24px;border-radius:24px;text-align:left;cursor:pointer;color:#fff;font-family:inherit;
+ background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(14px);
+ box-shadow:0 10px 40px rgba(0,0,0,.25);transition:transform .25s,box-shadow .25s,border-color .25s;overflow:hidden}
+.mn-card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.12) 50%,transparent 65%);transform:translateX(-120%);transition:transform .7s}
+.mn-card:hover{transform:translateY(-8px);border-color:#5cc8ff;box-shadow:0 22px 60px rgba(0,150,255,.35)}
+.mn-card:hover::after{transform:translateX(120%)}
+.mn-card.fuel:hover{border-color:#ffc266;box-shadow:0 22px 60px rgba(255,150,40,.32)}
+.mn-ico{width:68px;height:68px;border-radius:20px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e88e5,#00c6ff);box-shadow:0 10px 28px rgba(0,170,255,.5)}
+.mn-card.fuel .mn-ico{background:linear-gradient(135deg,#ff8a3d,#ffc23d);box-shadow:0 10px 28px rgba(255,150,40,.45)}
+.mn-t{display:block;margin-top:22px;font-size:28px;font-weight:800}
+.mn-t small{display:block;margin-top:6px;font-size:13px;font-weight:400;color:rgba(255,255,255,.65)}
+.mn-go{position:absolute;right:22px;bottom:22px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);transition:transform .25s,background .25s}
+.mn-card:hover .mn-go{transform:translateX(5px);background:rgba(255,255,255,.2)}
+.mn-foot{position:relative;padding:18px;text-align:center;font-size:13px;color:rgba(255,255,255,.6)}
+.mn-foot b{color:#fff}
+@media(max-width:700px){.mn-top{padding:16px}.mn-main h2{font-size:34px}.mn-card{width:100%;max-width:380px}}
+#login{position:fixed;inset:0;z-index:9;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto;color:#fff;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;
+ background:radial-gradient(900px 520px at 12% 8%,rgba(40,120,220,.38),transparent 60%),radial-gradient(800px 520px at 92% 92%,rgba(0,200,255,.2),transparent 60%),linear-gradient(160deg,#081a38,#0a2447 55%,#06142b)}
+#login::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:46px 46px;-webkit-mask-image:radial-gradient(ellipse at center,#000 25%,transparent 78%);mask-image:radial-gradient(ellipse at center,#000 25%,transparent 78%)}
+.lg-wrap{position:relative;display:flex;width:min(1060px,100%);border-radius:28px;overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.lg-left{flex:0 0 40%;display:flex;flex-direction:column;padding:44px 38px 0;border-right:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(30,136,229,.2),rgba(0,0,0,0))}
+.lg-left img{width:150px;height:auto;display:block;margin-bottom:22px;filter:drop-shadow(0 0 14px rgba(0,180,255,.35))}
+#lgFb{display:none;margin-bottom:22px;line-height:1.1}
+#lgFb b{font-size:46px;font-weight:800}
+#lgFb small{display:block;font-size:11px;letter-spacing:2px;margin-top:2px}
+.lg-left h1{margin:0;font-size:56px;font-weight:800;letter-spacing:1px}
+.lg-left .sub{margin:4px 0 0;font-size:18px;color:#9fe3ff}
+.lg-left .tag{margin:36px 0 48px;font-size:22px;line-height:1.55;font-weight:500}
+.lg-art{margin-top:auto;display:block;width:calc(100% + 76px);margin-left:-38px;height:auto;pointer-events:none}
+.lg-right{flex:1;display:flex;flex-direction:column;justify-content:center;padding:48px 8% 34px}
+.lg-right h2{margin:0;font-size:42px;font-weight:800}
+.lg-right .lead{margin:8px 0 34px;color:rgba(255,255,255,.65);font-size:16px}
+.lg-right label{display:block;font-weight:700;font-size:15px;color:#cfe6ff;margin-bottom:10px}
+.lg-in{display:flex;align-items:center;gap:12px;height:60px;padding:0 20px;border:1px solid rgba(255,255,255,.22);border-radius:16px;background:rgba(255,255,255,.07)}
+.lg-in:focus-within{border-color:#5cc8ff;box-shadow:0 0 0 3px rgba(0,198,255,.18)}
+.lg-in svg{flex:none;stroke:#7fdcff}
+.lg-in input{flex:1;border:0;outline:0;font-size:17px;color:#fff;background:transparent;height:100%;min-width:0}
+.lg-in input::placeholder{color:rgba(255,255,255,.42)}
+.lg-btn{margin-top:26px;height:60px;width:100%;border:0;border-radius:16px;color:#fff;font-size:19px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(90deg,#1e88e5,#00c6ff);box-shadow:0 12px 32px rgba(0,170,255,.45);transition:transform .2s,box-shadow .2s}
+.lg-btn:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(0,170,255,.55)}
+#lmsg{margin:16px 0 0;padding:13px 16px;background:rgba(0,198,255,.12);border:1px solid rgba(0,198,255,.28);color:#9fe3ff;border-radius:12px;font-size:14px}
+#lmsg.err{background:rgba(255,80,80,.14);border-color:rgba(255,120,120,.4);color:#ffb3ae}
+#lmsg:empty{display:none}
+.lg-foot{margin-top:auto;padding-top:34px;text-align:center;color:rgba(255,255,255,.7);font-size:15px;font-weight:600}
+.lg-foot .ico{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);margin-right:10px;vertical-align:middle}
+.lg-foot svg{fill:#7fdcff}.lg-foot svg *{stroke:#7fdcff}
+.lg-foot small{display:block;margin-top:10px;font-weight:400;font-size:13px;color:rgba(255,255,255,.55)}
+.lg-foot small b{color:#fff}
+@media(max-width:760px){
+ #login{padding:14px;align-items:flex-start}
+ .lg-wrap{flex-direction:column}
+ .lg-left{flex:none;border-right:0;border-bottom:1px solid rgba(255,255,255,.12);padding:30px 24px 0}
+ .lg-left h1{font-size:46px}
+ .lg-left .tag{margin:24px 0 34px;font-size:20px}
+ .lg-art{width:calc(100% + 48px);margin-left:-24px}
+ .lg-right{padding:30px 24px 26px}
+ .lg-right h2{font-size:36px}
+}
+#toast{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity .25s}
+#toast.show{opacity:1}
+.ts-card{display:flex;align-items:center;gap:14px;max-width:min(520px,90vw);padding:18px 26px;border-radius:20px;color:#fff;font:600 16px Inter,"Segoe UI",Roboto,Arial,sans-serif;background:rgba(8,26,56,.92);border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 28px 80px rgba(0,0,0,.55);transform:translateY(18px) scale(.9);transition:transform .35s cubic-bezier(.2,.9,.3,1.3)}
+#toast.show .ts-card{transform:none}
+.ts-ico{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;background:#2b7cd3}
+#toast.ok .ts-ico{background:#12a77d;box-shadow:0 0 0 6px rgba(18,167,125,.2)}
+#toast.err .ts-ico{background:#e5484d;box-shadow:0 0 0 6px rgba(229,72,77,.2)}
+#toast.info .ts-ico{background:#2b7cd3;box-shadow:0 0 0 6px rgba(43,124,211,.22)}
+#toast.load .ts-ico{background:transparent;border:3px solid rgba(255,255,255,.25);border-top-color:#5cc8ff;animation:tsspin .8s linear infinite}
+@keyframes tsspin{to{transform:rotate(360deg)}}
 .bar,.page,#fbar,#fuel,#menu{display:none}
 body.in #login{display:none}
 body.in:not(.m-bill):not(.m-fuel) #menu{display:flex}
@@ -45,7 +143,6 @@ body.m-bill .bar,body.m-fuel #fbar{display:flex}
 body.m-bill .page{display:block}
 body.m-fuel #fuel{display:block}
 body.viewer .ed,body:not(.viewer) .vw,body.b-locked #printBtn,body.b-locked #lockBtn,body.f-locked #fprintBtn,body.f-locked #flockBtn{display:none}
-#menu button{display:block;width:100%;margin:10px 0}
 
 #fuel{font-family:Arial,Helvetica,sans-serif;font-size:13.5px;color:#222}
 .fpage{width:210mm;height:297mm;margin:0 auto 20px;background:#fff;padding:12mm 14mm 12mm 16mm;display:flex;flex-direction:column}
@@ -72,8 +169,8 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
 #fprn{text-align:center}
 @media print{
  body{background:#fff}
- .bar,#fbar,.st,#login,#menu{display:none!important}
- #fuel .fpage{margin:0;height:295mm;overflow:hidden}
+ .bar,#fbar,.st,#login,#menu,#toast{display:none!important}
+ #fuel .fpage{margin:0;height:294mm;overflow:hidden;break-after:avoid;page-break-after:avoid}
  #fuel input,#fuel textarea{border:0!important;background:transparent!important;padding:0!important}
  #fuel input::-webkit-calendar-picker-indicator{display:none!important}
  body:not(.viewer) #fuel,body.f-locked #fuel{display:none!important}
@@ -81,39 +178,97 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
  body:not(.viewer) .page,body.b-locked .page{display:none!important}
  body:not(.viewer)::before{content:"প্রিন্ট করার অনুমতি নেই";display:block;font:16px Arial}
  body.viewer.b-locked::before{content:"ডাটা লক করা, প্রিন্ট করা যাবে না";display:block;font:16px Arial}
- .page{margin:0;width:100%;min-height:0;padding:0}
+ .page{margin:0;width:100%;height:200mm;min-height:0;padding:8mm 8mm 8mm 18mm;overflow:hidden;break-after:avoid;page-break-after:avoid;break-inside:avoid}
  select{-webkit-appearance:none;appearance:none}
  input::placeholder{color:transparent!important;-webkit-text-fill-color:transparent!important}
+ html,body{height:auto!important;min-height:0!important;margin:0!important;padding:0!important}
+ body.m-bill,body.m-fuel{background:#fff!important;min-height:0!important}
+ body.m-bill .page,body.m-fuel .fpage{box-shadow:none!important}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
-<div id="login"><div>
- <h3 style="margin:0">Bill Form</h3>
- <input id="code" type="password" placeholder="আপনার কোড" autocomplete="off">
- <button onclick="login($('code').value)">প্রবেশ</button>
- <p id="lmsg" style="color:#b00;font-size:13px;min-height:16px"></p>
-</div></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></symbol>
+<symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V3h10v6M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/><path d="M7 14h10v7H7z"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+<symbol id="i-out" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9"/></symbol>
+</defs></svg>
+<div id="login">
+ <img class="mn-wm" src="https://commons.wikimedia.org/wiki/Special:FilePath/MGI_Logo.png?width=900" alt="" onerror="this.style.display='none'">
+ <div class="lg-wrap">
+  <div class="lg-left">
+   <img id="lgLogo" src="https://commons.wikimedia.org/wiki/Special:FilePath/MGI_Logo.png?width=400" alt="mgi" onerror="this.style.display='none';document.getElementById('lgFb').style.display='block'">
+   <div id="lgFb"><b>mgi</b><small>MEGHNA GROUP OF INDUSTRIES</small></div>
+   <h1>UCIL</h1>
+   <p class="sub">Transport Department</p>
+   <p class="tag">Safe Journey<br>Strong Operations</p>
+   <svg class="lg-art" viewBox="0 0 560 270" preserveAspectRatio="xMidYMax meet" fill="none" stroke-linejoin="round">
+    <g stroke="rgba(255,255,255,.22)" stroke-width="3" fill="rgba(255,255,255,.05)">
+     <rect x="20" y="120" width="62" height="130"/><rect x="36" y="96" width="28" height="24"/>
+     <rect x="96" y="160" width="80" height="90"/><rect x="116" y="140" width="26" height="20"/>
+     <rect x="196" y="84" width="38" height="166"/><path d="M208 84V68M222 84V68"/>
+     <rect x="262" y="150" width="92" height="100"/><rect x="280" y="128" width="28" height="22"/>
+     <rect x="372" y="110" width="54" height="140"/><path d="M388 110V92M410 110V92"/>
+     <rect x="446" y="170" width="64" height="80"/>
+    </g>
+    <g stroke="rgba(255,255,255,.3)" stroke-width="2.5"><path d="M0 250h560"/><path d="M0 259h560" opacity=".5"/></g>
+    <g transform="translate(120 132)" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="#0b2a55">
+     <path d="M12 52h46M2 66h56M14 80h38" fill="none" opacity=".55"/>
+     <rect x="66" y="26" width="128" height="74"/><path d="M76 44h108M76 56h108M76 68h108" stroke-width="1.4" opacity=".7" fill="none"/>
+     <path d="M194 48h44l26 28v24h-70z"/><path d="M204 56h28l16 18h-44z" stroke-width="1.6" fill="#0a2447"/>
+     <circle cx="110" cy="104" r="14" fill="#0a2447"/><circle cx="110" cy="104" r="5" fill="none"/>
+     <circle cx="232" cy="104" r="14" fill="#0a2447"/><circle cx="232" cy="104" r="5" fill="none"/>
+    </g></svg>
+  </div>
+  <div class="lg-right">
+   <h2>Login</h2>
+   <p class="lead">Access your transport system</p>
+   <label for="code">User ID</label>
+   <div class="lg-in">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b7a90" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6z"/></svg>
+    <input id="code" type="password" placeholder="Enter your User ID" autocomplete="off">
+   </div>
+   <button class="lg-btn" onclick="login($('code').value)">Login <span>→</span></button>
+   <p id="lmsg"></p>
+   <div class="lg-foot"><span class="ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1a4f86"><rect x="4" y="4" width="16" height="16" rx="2.5" fill="none" stroke="#1a4f86" stroke-width="2.4"/><rect x="9" y="9" width="6" height="6"/></svg></span>For official use only
+    <small>Developed by <b>Md. Nazmul Hossain</b></small></div>
+  </div>
+ </div>
+</div>
 
-<div id="menu"><div>
- <h3 style="margin:0 0 6px">কোনটিতে প্রবেশ করবেন?</h3>
- <button onclick="openModule('bill')">📄 বিল</button>
- <button onclick="openModule('fuel')">⛽ ফুয়েল স্লিপ</button>
- <button onclick="logout()" style="font-size:13px">লগআউট</button>
-</div></div>
+<div id="menu">
+ <img class="mn-wm" src="https://commons.wikimedia.org/wiki/Special:FilePath/MGI_Logo.png?width=900" alt="" onerror="this.style.display='none'">
+ <div class="mn-top">
+  <div class="mn-user"><span class="mn-av"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg></span><span id="mnName"></span><em id="mnRole"></em></div>
+  <button class="mn-out" onclick="logout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9"/></svg> Logout</button>
+ </div>
+ <div class="mn-main">
+  <p class="mn-kick">UCIL · TRANSPORT DEPARTMENT</p>
+  <h2>Select Module</h2>
+  <p class="mn-sub">Choose a module to continue</p>
+  <div class="mn-cards">
+   <button class="mn-card" onclick="openModule('bill')"><span class="mn-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><span class="mn-t">Bill<small>KR Vendor Invoice · Parked Document</small></span><span class="mn-go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+   <button class="mn-card fuel" onclick="openModule('fuel')"><span class="mn-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16M3 21h13M7 7h5v4H7zM15 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V9l-3-3"/></svg></span><span class="mn-t">Fuel Slip<small>Diesel Fuel Slip · Meghna Transport</small></span><span class="mn-go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></button>
+  </div>
+ </div>
+ <div class="mn-foot">Developed by <b>Md. Nazmul Hossain</b></div>
+</div>
 
 <div id="fbar">
- <span id="who2" style="font-weight:bold;margin-right:auto"></span>
- <span id="fmsg" style="font-size:13px;margin-right:8px"></span>
- <input id="fq" placeholder="Fuel Slip Number" onkeydown="if(event.key==='Enter')ffind()">
- <button onclick="ffind()">🔍 খুঁজুন</button>
- <button class="ed" onclick="fnew()">নতুন স্লিপ</button>
- <button class="ed" id="fsaveBtn" onclick="fsave()">💾 সেভ</button>
- <button class="vw" id="fprintBtn" onclick="fprint()">🖨 প্রিন্ট</button>
- <button class="vw" id="flockBtn" onclick="flock()">🔒 ডাটা লক</button>
- <button onclick="toMenu()">⇦ মেনু</button>
- <button onclick="logout()">লগআউট</button>
+ <span id="who2"></span>
+  <input id="fq" placeholder="Fuel Slip Number" onkeydown="if(event.key==='Enter')ffind()">
+ <button class="tb t-cy" onclick="ffind()"><svg class="ic"><use href="#i-search"/></svg><span>Search</span></button>
+ <button class="tb ed" onclick="fnew()"><svg class="ic"><use href="#i-plus"/></svg><span>New Slip</span></button>
+ <button class="tb ed t-pr" id="fsaveBtn" onclick="fsave()"><svg class="ic"><use href="#i-save"/></svg><span>Save</span></button>
+ <button class="tb vw t-gn" id="fprintBtn" onclick="fprint()"><svg class="ic"><use href="#i-print"/></svg><span>Print</span></button>
+ <button class="tb vw t-am" id="flockBtn" onclick="flock()"><svg class="ic"><use href="#i-lock"/></svg><span>Lock</span></button>
+ <button class="tb " onclick="toMenu()"><svg class="ic"><use href="#i-menu"/></svg><span>Menu</span></button>
+ <button class="tb t-rd" onclick="logout()"><svg class="ic"><use href="#i-out"/></svg><span>Logout</span></button>
 </div>
 <div id="fuel"><div class="fpage">
  <div class="fhead">
@@ -167,7 +322,7 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
  <div class="ffoot">
   <div class="fsign">
    <div>Prepared By</div>
-   <div>Approved By<br><span id="fapp"></span></div>
+   <div>Approved By</div>
    <div>Printed By</div>
   </div>
   <div class="fpd fpdg"><div><div id="fcreator"></div>Print Date and Time: <span id="fpdt"></span></div><div id="fprn"></div></div>
@@ -175,16 +330,18 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
  <datalist id="dlVeh"></datalist><datalist id="dlDest"></datalist>
 </div></div>
 
+<div id="toast"><div class="ts-card"><span class="ts-ico"></span><span class="ts-txt"></span></div></div>
+
 <div class="bar">
  <span id="who"></span>
  <input id="q" placeholder="Doc. Number" onkeydown="if(event.key==='Enter')findBill()">
- <button onclick="findBill()">🔍 খুঁজুন</button>
- <button onclick="toMenu()">⇦ মেনু</button>
- <button class="ed" onclick="newBill()">নতুন বিল</button>
- <button class="ed" id="saveBtn" onclick="save()">💾 সেভ</button>
- <button class="vw" id="printBtn" onclick="doPrint()">🖨 প্রিন্ট</button>
- <button class="vw" id="lockBtn" onclick="lockBill()">🔒 ডাটা লক</button>
- <button onclick="logout()">লগআউট</button>
+ <button class="tb t-cy" onclick="findBill()"><svg class="ic"><use href="#i-search"/></svg><span>Search</span></button>
+ <button class="tb ed" onclick="newBill()"><svg class="ic"><use href="#i-plus"/></svg><span>New Bill</span></button>
+ <button class="tb ed t-pr" id="saveBtn" onclick="save()"><svg class="ic"><use href="#i-save"/></svg><span>Save</span></button>
+ <button class="tb vw t-gn" id="printBtn" onclick="doPrint()"><svg class="ic"><use href="#i-print"/></svg><span>Print</span></button>
+ <button class="tb vw t-am" id="lockBtn" onclick="lockBill()"><svg class="ic"><use href="#i-lock"/></svg><span>Lock</span></button>
+ <button class="tb " onclick="toMenu()"><svg class="ic"><use href="#i-menu"/></svg><span>Menu</span></button>
+ <button class="tb t-rd" onclick="logout()"><svg class="ic"><use href="#i-out"/></svg><span>Logout</span></button>
 </div>
 
 <div class="page">
@@ -211,7 +368,6 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
   <thead><tr><th style="text-align:center">Itm</th><th style="text-align:center">PK</th><th>Account</th><th>Account Short Text</th><th>Assignment</th><th>Tx</th><th class="n">Amount</th></tr></thead>
   <tbody id="rows"></tbody>
  </table>
- <p class="st" id="status"></p>
  <p id="creator" style="margin:10px 0 0;font-size:12px"></p>
 </div>
 
@@ -229,9 +385,18 @@ async function api(action,data,code){
  try{
   const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({action,code:code||S.code},data||{}))});
   return await r.json();
- }catch(e){return{ok:false,error:"সার্ভারের সাথে সংযোগ হয়নি"}}
+ }catch(e){return{ok:false,error:"Connection failed. Please check your internet."}}
 }
-function msg(t,ok){const s=$("status");s.textContent=t||"";s.className="st"+(ok?" ok":"")}
+let tT;
+function toast(t,type){
+ const el=$("toast");clearTimeout(tT);
+ if(!t){el.classList.remove("show");return}
+ el.className="show "+type;el.querySelector(".ts-txt").textContent=t;
+ el.querySelector(".ts-ico").textContent={ok:"✓",err:"!",info:"i",load:""}[type];
+ const d={load:0,ok:2300,info:2800,err:4200}[type];
+ if(d)tT=setTimeout(()=>el.classList.remove("show"),d);
+}
+function msg(t,ok){toast(t,ok==="info"?"info":ok?(/\.\.\.$/.test(t||"")?"load":"ok"):"err")}
 
 // ---- rows
 const tb=$("rows");
@@ -296,7 +461,7 @@ function clearForm(keep){
  docDateStr=fmt(new Date());$("docDate").textContent=docDateStr;
  setPosting(todayISO());recalc();if(!keep)msg("");
  setBillLocked(false);setLocked(!isEd());$("creator").textContent="";
- $("saveBtn").textContent="💾 সেভ";
+ $("saveBtn").lastElementChild.textContent="Save";
 }
 async function newBill(keep){
  if(!isEd())return;
@@ -318,7 +483,7 @@ async function findBill(){
  ACCS.forEach(a=>{if(r.amounts[a]!==undefined&&i<body.length){const t=body[i++];t.children[2].firstChild.value=a;t.children[6].firstChild.value=Number(r.amounts[a]).toFixed(2)}});
  recalc();editing=true;setBillLocked(!!r.locked);
  if(billLocked)setLocked(true);
- $("saveBtn").textContent="💾 আপডেট";
+ $("saveBtn").lastElementChild.textContent="Update";
  $("creator").textContent="Bill Creator: "+r.creator;
  msg(billLocked?"🔒 লক করা বিল, এডিট করা যাবে না":"",true);
 }
@@ -344,27 +509,28 @@ async function save(){
 // ---- login
 async function login(code,auto){
  code=String(code||"").trim();if(!code)return;
- if(API_URL.indexOf("PASTE")===0){$("lmsg").textContent="API_URL বসানো হয়নি";return}
- $("lmsg").textContent="যাচাই হচ্ছে...";
+ if(API_URL.indexOf("PASTE")===0){$("lmsg").className="err";$("lmsg").textContent="API_URL is not set";return}
+ $("lmsg").className="";$("lmsg").textContent="Verifying your User ID...";
  const r=await api("login",{},code);
- if(!r.ok){$("lmsg").textContent=r.error;try{sessionStorage.removeItem("billCode")}catch(e){}return}
+ if(!r.ok){$("lmsg").className="err";$("lmsg").textContent=(String(r.error||"").indexOf("কোড সঠিক নয়")>=0?"Invalid User ID. Please try again.":r.error);try{sessionStorage.removeItem("billCode")}catch(e){}return}
  S={code,name:r.name,role:r.role};
  try{sessionStorage.setItem("billCode",code)}catch(e){}
  document.body.classList.add("in");
  document.body.classList.toggle("viewer",!isEd());
- $("who").textContent="👤 "+S.name+" ("+(isEd()?"Editor":"Viewer")+")";
+ $("who").textContent=S.name+" · "+(isEd()?"Editor":"Viewer");
  $("who2").textContent=$("who").textContent;
+ $("mnName").textContent=S.name;$("mnRole").textContent=isEd()?"Editor":"Viewer";
  setLocked(!isEd());
 }
 function openModule(m){
  document.body.classList.remove("m-bill","m-fuel");
  document.body.classList.add("m-"+m);setPage();
  if(m==="bill"){
-  if(isEd())newBill();else{clearForm();$("docNo").textContent="";msg("Doc. Number দিয়ে খুঁজুন",true)}
+  if(isEd())newBill();else{clearForm();$("docNo").textContent="";msg("Doc. Number দিয়ে খুঁজুন","info")}
  }
  if(m==="fuel"){
   setBillLocked(false);floadLists();
-  if(isEd())fnew();else{fclear();fmsg("Fuel Slip Number দিয়ে খুঁজুন",true)}
+  if(isEd())fnew();else{fclear();fmsg("Fuel Slip Number দিয়ে খুঁজুন","info")}
  }
 }
 function toMenu(){document.body.classList.remove("m-bill","m-fuel");setPage()}
@@ -404,7 +570,7 @@ $("code").addEventListener("keydown",e=>{if(e.key==="Enter")login($("code").valu
 const PGS=document.createElement("style");document.head.appendChild(PGS);
 function setPage(){
  const f=document.body.classList.contains("m-fuel");
- PGS.textContent=f?"@page{size:A4 portrait;margin:0}":"@page{size:A4 landscape;margin:8mm 8mm 8mm 18mm}";
+ PGS.textContent=f?"@page{size:A4 portrait;margin:0}":"@page{size:A4 landscape;margin:0}";
 }
 window.addEventListener("beforeprint",setPage);
 // ================= Fuel Slip =================
@@ -415,11 +581,10 @@ const FIN=["dcode","phone","kpl","veh","last","act","dest","allow","remarks"];
 let fEditing=false,fLocked=false,fDate="",dTok=0,dT,fBusy=false,FL={vehicles:[],destinations:[]};
 function setFLocked(b){fLocked=b;document.body.classList.toggle("f-locked",b)}
 function fReadonly(b){FIN.forEach(i=>$(i).disabled=b)}
-function fmsg(t,ok){const m=$("fmsg");m.textContent=t||"";m.style.color=ok?"#080":"#b00"}
+function fmsg(t,ok){msg(t,ok)}
 function fclock(){
  const t=new Date(),d=pad(t.getDate())+"."+pad(t.getMonth()+1)+"."+t.getFullYear();
  if(!fEditing){fDate=d;$("fdt").textContent=d}
- $("fapp").textContent=d;
  $("fpdt").textContent=d+" "+pad(t.getHours())+":"+pad(t.getMinutes())+":"+pad(t.getSeconds());
 }
 setInterval(fclock,1000);window.addEventListener("beforeprint",fclock);
@@ -429,7 +594,7 @@ function fclear(keep){
  FIN.forEach(i=>$(i).value="");
  ["did","dname","cur","req","fslip","fcreator","fprn"].forEach(i=>$(i).textContent="");
  fEditing=false;setFLocked(false);fReadonly(!isEd());
- $("fsaveBtn").textContent="💾 সেভ";fclock();if(!keep)fmsg("");
+ $("fsaveBtn").lastElementChild.textContent="Save";fclock();if(!keep)fmsg("");
 }
 async function fnew(keep){
  if(!isEd())return;
@@ -497,7 +662,7 @@ async function ffind(){
  $("kpl").value=fv3(r.kpl);$("veh").value=r.veh;$("last").value=fv3(r.last);$("act").value=fv3(r.act);
  $("dest").value=r.dest;$("allow").value=fv3(r.allow);$("remarks").value=r.remarks;
  fcalc();setFLocked(!!r.locked);fReadonly(!isEd()||!!r.locked);
- $("fsaveBtn").textContent="💾 আপডেট";
+ $("fsaveBtn").lastElementChild.textContent="Update";
  $("fcreator").textContent="Fuel Slip Creator: "+r.creator;
  fmsg(r.locked?"🔒 লক করা স্লিপ, এডিট করা যাবে না":"",true);
 }
