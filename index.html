@@ -8,7 +8,7 @@
 @page{size:A4 landscape;margin:0}
 *{box-sizing:border-box}
 body{margin:0;background:#e6e6e6;font-family:"Courier New",Courier,monospace;font-size:12px;color:#000}
-.bar,#fbar{position:sticky;top:10px;z-index:5;width:min(281mm,96vw);margin:14px auto;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-radius:18px;color:#fff;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;background:rgba(10,36,71,.72);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.bar,#fbar,#pbar{position:sticky;top:10px;z-index:5;width:min(281mm,96vw);margin:14px auto;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-radius:18px;color:#fff;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;font-size:14px;background:rgba(10,36,71,.72);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 12px 40px rgba(0,0,0,.35)}
 .ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .tb{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font:600 14px Inter,"Segoe UI",Roboto,Arial,sans-serif;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s,border-color .2s}
 .tb::after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-120%);transition:transform .6s}
@@ -21,14 +21,14 @@ body{margin:0;background:#e6e6e6;font-family:"Courier New",Courier,monospace;fon
 .tb.t-gn{background:linear-gradient(135deg,#12a77d,#38d9a9);border-color:transparent}
 .tb.t-am{background:linear-gradient(135deg,#ff8a3d,#ffc23d);border-color:transparent;color:#2a1500}
 .tb.t-rd:hover{background:rgba(255,80,80,.24);border-color:#ff8e8e;box-shadow:0 10px 26px rgba(255,80,80,.3)}
-.bar input,#fbar input{height:40px;width:170px;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;font:14px Inter,"Segoe UI",Roboto,Arial,sans-serif;outline:0}
-.bar input::placeholder,#fbar input::placeholder{color:rgba(255,255,255,.5)}
-.bar input:focus,#fbar input:focus{border-color:#5cc8ff;box-shadow:0 0 0 3px rgba(0,198,255,.18)}
-#who,#who2{margin-right:auto;display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;padding:6px 16px 6px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16)}
-#who::before,#who2::before{content:"";width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#1e88e5,#00c6ff)}
+.bar input,#fbar input,#pbar input{height:40px;width:170px;padding:0 14px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;font:14px Inter,"Segoe UI",Roboto,Arial,sans-serif;outline:0}
+.bar input::placeholder,#fbar input::placeholder,#pbar input::placeholder{color:rgba(255,255,255,.5)}
+.bar input:focus,#fbar input:focus,#pbar input:focus{border-color:#5cc8ff;box-shadow:0 0 0 3px rgba(0,198,255,.18)}
+#who,#who2,#who3{margin-right:auto;display:flex;align-items:center;gap:9px;font-weight:600;font-size:14px;padding:6px 16px 6px 7px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16)}
+#who::before,#who2::before,#who3::before{content:"";width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#1e88e5,#00c6ff)}
 #fmsg{font-size:13px;font-weight:600}
 #fmsg.ok{color:#7dffb0}#fmsg.err{color:#ff9c96}
-body.m-bill,body.m-fuel{min-height:100vh;background-color:#081a38;background-attachment:fixed;background-size:auto,auto,46px 46px,46px 46px,auto;
+body.m-bill,body.m-fuel,body.m-pump{min-height:100vh;background-color:#081a38;background-attachment:fixed;background-size:auto,auto,46px 46px,46px 46px,auto;
  background-image:radial-gradient(900px 520px at 10% 0%,rgba(40,120,220,.35),transparent 60%),radial-gradient(800px 520px at 95% 100%,rgba(0,200,255,.18),transparent 60%),linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(160deg,#081a38,#0a2447 55%,#06142b)}
 body.m-bill .page,body.m-fuel .fpage{box-shadow:0 24px 70px rgba(0,0,0,.5)}
 .page{width:281mm;min-height:194mm;margin:0 auto 20px;background:#fff;padding:6mm 6mm 6mm 20mm}
@@ -136,10 +136,29 @@ select:disabled{-webkit-appearance:none;appearance:none}
 #toast.info .ts-ico{background:#2b7cd3;box-shadow:0 0 0 6px rgba(43,124,211,.22)}
 #toast.load .ts-ico{background:transparent;border:3px solid rgba(255,255,255,.25);border-top-color:#5cc8ff;animation:tsspin .8s linear infinite}
 @keyframes tsspin{to{transform:rotate(360deg)}}
-.bar,.page,#fbar,#fuel,#menu{display:none}
+.pwrap{width:min(1100px,96vw);margin:0 auto 40px;color:#fff;font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif}
+.pwrap h3{margin:6px 4px 16px;font-size:24px;font-weight:800;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pwrap h3 small{font-size:13px;font-weight:500;color:rgba(255,255,255,.6)}
+.pscroll{overflow-x:auto}
+.pt{width:100%;border-collapse:collapse;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15)}
+.pt th{padding:13px 14px;text-align:left;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#9fe3ff;background:rgba(255,255,255,.06);white-space:nowrap}
+.pt td{padding:12px 14px;border-top:1px solid rgba(255,255,255,.08);font-size:15px;white-space:nowrap}
+.pt tbody tr:hover td{background:rgba(255,255,255,.05)}
+.pt td small{display:block;color:rgba(255,255,255,.55);font-size:12px;margin-top:3px}
+.pchip{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;background:rgba(255,194,61,.18);color:#ffd27a;border:1px solid rgba(255,194,61,.4)}
+.pchip.ok{background:rgba(56,217,169,.16);color:#7dffd0;border-color:rgba(56,217,169,.4)}
+.pcards{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 22px}
+.pcard{flex:1;min-width:210px;padding:20px 22px;border-radius:20px;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.18)}
+.pcard span{font-size:13px;color:rgba(255,255,255,.65);letter-spacing:.5px}
+.pcard b{display:block;font-size:34px;font-weight:800;margin-top:6px}
+.pcard.am b{color:#ffd27a}.pcard.gn b{color:#7dffd0}
+.pempty{padding:44px;text-align:center;color:rgba(255,255,255,.6);background:rgba(255,255,255,.05);border-radius:18px;border:1px dashed rgba(255,255,255,.2)}
+.pmon{height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;padding:0 12px;font-family:inherit;font-size:14px;color-scheme:dark}
+.bar,.page,#fbar,#fuel,#menu,#pbar,#pump{display:none}
 body.in #login{display:none}
-body.in:not(.m-bill):not(.m-fuel) #menu{display:flex}
-body.m-bill .bar,body.m-fuel #fbar{display:flex}
+body.in:not(.m-bill):not(.m-fuel):not(.m-pump) #menu{display:flex}
+body.m-bill .bar,body.m-fuel #fbar,body.m-pump #pbar{display:flex}
+body.m-pump #pump{display:block}
 body.m-bill .page{display:block}
 body.m-fuel #fuel{display:block}
 body.viewer .ed,body:not(.viewer) .vw,body.b-locked #printBtn,body.b-locked #lockBtn,body.f-locked #fprintBtn,body.f-locked #flockBtn{display:none}
@@ -169,7 +188,7 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
 #fprn{text-align:center}
 @media print{
  body{background:#fff}
- .bar,#fbar,.st,#login,#menu,#toast{display:none!important}
+ .bar,#fbar,#pbar,#pump,.st,#login,#menu,#toast{display:none!important}
  #fuel .fpage{margin:0;height:294mm;overflow:hidden;break-after:avoid;page-break-after:avoid}
  #fuel input,#fuel textarea{border:0!important;background:transparent!important;padding:0!important}
  #fuel input::-webkit-calendar-picker-indicator{display:none!important}
@@ -182,7 +201,7 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
  select{-webkit-appearance:none;appearance:none}
  input::placeholder{color:transparent!important;-webkit-text-fill-color:transparent!important}
  html,body{height:auto!important;min-height:0!important;margin:0!important;padding:0!important}
- body.m-bill,body.m-fuel{background:#fff!important;min-height:0!important}
+ body.m-bill,body.m-fuel,body.m-pump{background:#fff!important;min-height:0!important}
  body.m-bill .page,body.m-fuel .fpage{box-shadow:none!important}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -197,6 +216,9 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
 <symbol id="i-menu" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
 <symbol id="i-out" viewBox="0 0 24 24"><path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4M16 8l4 4-4 4M20 12H9"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></symbol>
 </defs></svg>
 <div id="login">
  <img class="mn-wm" src="https://commons.wikimedia.org/wiki/Special:FilePath/MGI_Logo.png?width=900" alt="" onerror="this.style.display='none'">
@@ -331,6 +353,17 @@ img.flogo{width:28mm;height:auto;max-height:26mm;object-fit:contain}
 </div></div>
 
 <div id="toast"><div class="ts-card"><span class="ts-ico"></span><span class="ts-txt"></span></div></div>
+
+<div id="pbar">
+ <span id="who3"></span>
+ <button class="tb t-pr" data-tab="pending" onclick="ptab('pending')"><svg class="ic"><use href="#i-clock"/></svg><span>Pending</span></button>
+ <button class="tb " data-tab="dispensed" onclick="ptab('dispensed')"><svg class="ic"><use href="#i-check"/></svg><span>Dispensed</span></button>
+ <button class="tb " data-tab="summary" onclick="ptab('summary')"><svg class="ic"><use href="#i-chart"/></svg><span>Summary</span></button>
+ <input id="pq" placeholder="Fuel Slip Number" onkeydown="if(event.key==='Enter')psearch()">
+ <button class="tb t-cy" onclick="psearch()"><svg class="ic"><use href="#i-search"/></svg><span>Search</span></button>
+ <button class="tb t-rd" onclick="logout()"><svg class="ic"><use href="#i-out"/></svg><span>Logout</span></button>
+</div>
+<div id="pump"><div class="pwrap"><div id="pbody"></div></div></div>
 
 <div class="bar">
  <span id="who"></span>
@@ -516,24 +549,27 @@ async function login(code,auto){
  S={code,name:r.name,role:r.role};
  try{sessionStorage.setItem("billCode",code)}catch(e){}
  document.body.classList.add("in");
- document.body.classList.toggle("viewer",!isEd());
- $("who").textContent=S.name+" · "+(isEd()?"Editor":"Viewer");
+ document.body.classList.toggle("viewer",S.role==="viewer");
+ $("who").textContent=S.name+" · "+({editor:"Editor",pump:"Pump"}[S.role]||"Viewer");
  $("who2").textContent=$("who").textContent;
- $("mnName").textContent=S.name;$("mnRole").textContent=isEd()?"Editor":"Viewer";
+ $("mnName").textContent=S.name;$("mnRole").textContent=({editor:"Editor",pump:"Pump"}[S.role]||"Viewer");
  setLocked(!isEd());
+ $("who3").textContent=$("who").textContent;
+ if(S.role==="pump")openModule("pump");
 }
 function openModule(m){
- document.body.classList.remove("m-bill","m-fuel");
+ document.body.classList.remove("m-bill","m-fuel","m-pump");
  document.body.classList.add("m-"+m);setPage();
  if(m==="bill"){
   if(isEd())newBill();else{clearForm();$("docNo").textContent="";msg("Doc. Number দিয়ে খুঁজুন","info")}
  }
+ if(m==="pump"){ptab("pending")}
  if(m==="fuel"){
   setBillLocked(false);floadLists();
   if(isEd())fnew();else{fclear();fmsg("Fuel Slip Number দিয়ে খুঁজুন","info")}
  }
 }
-function toMenu(){document.body.classList.remove("m-bill","m-fuel");setPage()}
+function toMenu(){if(S.role==="pump")return;document.body.classList.remove("m-bill","m-fuel","m-pump");setPage()}
 function doPrint(){
  if(billLocked){msg("ডাটা লক করা, প্রিন্ট করা যাবে না");return}
  window.print();
@@ -561,7 +597,7 @@ document.addEventListener("keydown",e=>{
 function logout(){
  fclear();
  try{sessionStorage.removeItem("billCode")}catch(e){}
- S={code:"",name:"",role:""};document.body.classList.remove("in","viewer","m-bill","m-fuel");
+ S={code:"",name:"",role:""};document.body.classList.remove("in","viewer","m-bill","m-fuel","m-pump");
  $("code").value="";$("lmsg").textContent="";
 }
 $("code").addEventListener("keydown",e=>{if(e.key==="Enter")login($("code").value)});
@@ -685,6 +721,74 @@ async function flock(ask){
  for(let i=0;i<60;i++){const d=+n[i%n.length],w=1+((d*7+i*3)%3);if(i%2===0)h+='<rect x="'+x+'" y="0" width="'+w+'" height="30" fill="#222"/>';x+=w+0.6;if(x>113)break}
  svg.innerHTML=h;
 })();
+// ================= Pump =================
+const esc=x=>String(x==null?"":x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let ptabCur="pending",pSearch=false,pTotal=0;
+function ptab(t){
+ ptabCur=t;$("pq").value="";
+ document.querySelectorAll("#pbar [data-tab]").forEach(b=>b.classList.toggle("t-pr",b.dataset.tab===t));
+ if(t==="summary")return psummary();
+ return plist();
+}
+function prows(rows,title,sub){
+ const h='<h3>'+title+'<small id="pcnt">'+esc(sub)+'</small></h3>';
+ if(!rows.length){$("pbody").innerHTML=h+'<div class="pempty">No records found</div>';return}
+ $("pbody").innerHTML=h+'<div class="pscroll"><table class="pt"><thead><tr><th>Slip No.</th><th>Date</th><th>Vehicle</th><th>Driver Code</th><th>Driver</th><th>Allowed (L)</th><th>Status</th><th></th></tr></thead><tbody>'+
+ rows.map(r=>{
+  const done=r.status==="Dispensed";
+  return '<tr id="pr-'+esc(r.slip)+'"><td><b>'+esc(r.slip)+'</b></td><td>'+esc(r.date)+'</td><td>'+esc(r.veh)+'</td><td>'+esc(r.dcode)+'</td><td>'+esc(r.driver)+'</td><td>'+ff3(Number(r.allow)||0)+'</td><td>'+
+   (done?'<span class="pchip ok">Dispensed</span><small>'+esc(r.dAt)+' · '+esc(r.dBy)+'</small>':'<span class="pchip">Pending</span>')+'</td><td>'+
+   (done?'':'<button class="tb t-gn" onclick="pmark(\''+esc(r.slip)+'\')"><svg class="ic"><use href="#i-check"/></svg><span>Dispense</span></button>')+'</td></tr>';
+ }).join("")+'</tbody></table></div>';
+}
+async function plist(){
+ msg("Loading...",true);
+ const st=ptabCur==="dispensed"?"Dispensed":"Pending";
+ const r=await api("pumplist",{status:st});msg("");
+ if(!r.ok){msg(r.error);return}
+ pSearch=false;pTotal=r.total;
+ prows(r.rows,st+" Slips",r.total+" total"+(r.total>r.rows.length?" · showing "+r.rows.length:"")+(st==="Pending"?" · released by Accounts":""));
+}
+async function psearch(){
+ let q=$("pq").value.trim().toUpperCase();
+ if(!q){ptab(ptabCur);return}
+ if(/^\d+$/.test(q))q="CEM-"+q.padStart(5,"0");
+ msg("Searching...",true);const r=await api("pumpget",{slipNo:q});msg("");
+ if(!r.ok){msg(r.error);return}
+ pSearch=true;
+ prows([r.row],"Search Result",q);
+}
+async function pmark(no){
+ const tr=$("pr-"+no),btn=tr&&tr.querySelector("button");
+ if(btn)btn.disabled=true;
+ msg("Saving...",true);
+ const r=await api("pumpmark",{slipNo:no});
+ if(!r.ok){if(btn)btn.disabled=false;msg(r.error);return}
+ if(tr){
+  if(!pSearch&&ptabCur==="pending"){
+   tr.remove();pTotal=Math.max(0,pTotal-1);
+   if($("pcnt"))$("pcnt").textContent=pTotal+" total";
+   if(!$("pbody").querySelector("tbody").children.length){if(pTotal>0)plist();else $("pbody").querySelector(".pscroll").outerHTML='<div class="pempty">No records found</div>'}
+  }else{
+   tr.children[6].innerHTML='<span class="pchip ok">Dispensed</span><small>'+esc(r.dAt)+' · '+esc(r.dBy)+'</small>';
+   tr.children[7].innerHTML="";
+  }
+ }
+ msg("✔ "+no+" marked as Dispensed ("+ff3(Number(r.liters)||0)+" L)",true);
+}
+async function psummary(){
+ const t=new Date(),mon=$("pmon")?$("pmon").value:(t.getFullYear()+"-"+pad(t.getMonth()+1));
+ msg("Loading...",true);const r=await api("pumpsum",{month:mon});msg("");
+ if(!r.ok){msg(r.error);return}
+ let h='<h3>Monthly Summary <input type="month" id="pmon" class="pmon" value="'+esc(r.month)+'" onchange="psummary()"></h3>'+
+ '<div class="pcards"><div class="pcard gn"><span>LITERS DISPENSED (MONTH)</span><b>'+ff3(r.liters)+' L</b></div>'+
+ '<div class="pcard gn"><span>SLIPS DISPENSED (MONTH)</span><b>'+r.count+'</b></div>'+
+ '<div class="pcard am"><span>PENDING SLIPS (ALL TIME)</span><b>'+r.pendingCount+'</b></div>'+
+ '<div class="pcard am"><span>PENDING LITERS (ALL TIME)</span><b>'+ff3(r.pendingLiters)+' L</b></div></div>';
+ if(r.days.length)h+='<div class="pscroll"><table class="pt"><thead><tr><th>Date</th><th>Slips</th><th>Liters</th></tr></thead><tbody>'+r.days.map(d=>'<tr><td>'+esc(d.date)+'</td><td>'+d.count+'</td><td>'+ff3(d.liters)+'</td></tr>').join("")+'</tbody></table></div>';
+ else h+='<div class="pempty">No dispensed slips in this month</div>';
+ $("pbody").innerHTML=h;
+}
 clearForm();
 try{const c=sessionStorage.getItem("billCode");if(c)login(c,true)}catch(e){}
 </script>
